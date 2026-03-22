@@ -45,12 +45,28 @@ function buildEventCard(item) {
       <div class="event-meta">
         <div class="meta-line"><strong>Location:</strong> ${escapeHtml(item.LOCATION || "-")}</div>
         <div class="meta-line"><strong>Orario:</strong> ${escapeHtml(item.ORARIO || "-")}</div>
-        <div class="meta-line"><strong>Stato:</strong> ${escapeHtml(item.STATO || "-")}</div>
         <div class="meta-line"><strong>Info:</strong> ${escapeHtml(item.INFO_COMUNI || "-")}</div>
         <div class="meta-line"><strong>Note artista:</strong> ${escapeHtml(item.NOTE_ARTISTA || "-")}</div>
       </div>
       ${mapsLink}
     </article>
+  `;
+}
+
+function buildSection(title, items, emptyText) {
+  const content = items.length
+    ? items.map(buildEventCard).join("")
+    : `<div class="empty-state">${escapeHtml(emptyText)}</div>`;
+
+  return `
+    <section class="events-group">
+      <div class="section-title-row">
+        <h2>${escapeHtml(title)}</h2>
+      </div>
+      <div class="events-list">
+        ${content}
+      </div>
+    </section>
   `;
 }
 
@@ -84,18 +100,24 @@ async function loadData() {
       throw new Error(data.error || "Errore nel recupero dati");
     }
 
-    const items = Array.isArray(data.items) ? data.items : [];
+    const upcoming = Array.isArray(data.upcoming) ? data.upcoming : [];
+    const past = Array.isArray(data.past) ? data.past : [];
+    const total = upcoming.length + past.length;
 
-    if (items.length > 0) {
-      artistNameEl.textContent = items[0].NOME_ARTISTA || artist || idArtista || "Portale Artista";
-      subtitleEl.textContent = `${items.length} evento/i trovati`;
+    if (total > 0) {
+      const firstItem = upcoming[0] || past[0];
+      artistNameEl.textContent = firstItem?.NOME_ARTISTA || artist || idArtista || "Portale Artista";
+      subtitleEl.textContent = `${upcoming.length} prossimi • ${past.length} passati`;
       statusTextEl.innerHTML = `<span class="success">Dati caricati correttamente</span>`;
-      eventsListEl.innerHTML = items.map(buildEventCard).join("");
+
+      eventsListEl.innerHTML =
+        buildSection("Prossimi", upcoming, "Nessun evento imminente.") +
+        buildSection("Passati", past, "Nessun evento passato.");
     } else {
       artistNameEl.textContent = artist || idArtista || "Portale Artista";
       subtitleEl.textContent = "Nessun evento trovato";
       statusTextEl.innerHTML = `<span class="error">Nessun dato disponibile per questo artista</span>`;
-      eventsListEl.innerHTML = `<div class="empty-state">Non risultano eventi associati a questo artista.</div>`;
+      eventsListEl.innerHTML = `<div class="empty-state">Non risultano eventi visibili associati a questo artista.</div>`;
     }
   } catch (error) {
     artistNameEl.textContent = "Portale Artista";
