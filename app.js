@@ -59,11 +59,19 @@ async function loadData() {
     const artist = getQueryParam("artist");
     const idArtista = getQueryParam("id_artista");
 
-    let apiUrl = `${API_BASE_URL}?mode=all`;
+    if (!artist && !idArtista) {
+      artistNameEl.textContent = "Portale Artista";
+      subtitleEl.textContent = "Nessun artista selezionato";
+      statusTextEl.innerHTML = `<span class="error">Manca il parametro artist o id_artista nell'URL</span>`;
+      eventsListEl.innerHTML = `<div class="empty-state">Apri questa app con un link tipo <strong>?id_artista=ART001</strong> oppure <strong>?artist=Marco%20Caponi</strong>.</div>`;
+      return;
+    }
+
+    let apiUrl = "";
 
     if (idArtista) {
       apiUrl = `${API_BASE_URL}?mode=id&id_artista=${encodeURIComponent(idArtista)}`;
-    } else if (artist) {
+    } else {
       apiUrl = `${API_BASE_URL}?mode=artist&artist=${encodeURIComponent(artist)}`;
     }
 
@@ -79,7 +87,7 @@ async function loadData() {
     const items = Array.isArray(data.items) ? data.items : [];
 
     if (items.length > 0) {
-      artistNameEl.textContent = items[0].NOME_ARTISTA || artist || "Portale Artista";
+      artistNameEl.textContent = items[0].NOME_ARTISTA || artist || idArtista || "Portale Artista";
       subtitleEl.textContent = `${items.length} evento/i trovati`;
       statusTextEl.innerHTML = `<span class="success">Dati caricati correttamente</span>`;
       eventsListEl.innerHTML = items.map(buildEventCard).join("");
