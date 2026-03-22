@@ -1,17 +1,46 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Portale Artista</title>
 
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="style.css">
+  <meta name="theme-color" content="#0f1115" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Portale Artista" />
+
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="icon" href="icons/icon-192.png" />
+
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">PORTALE ARTISTA</div>
+    </header>
 
-  <h1>TEST PWA</h1>
-  <p>Se vedi questo stilizzato, funziona.</p>
+    <main class="container">
+      <section class="hero-card">
+        <h1 id="artistName">Caricamento...</h1>
+        <p id="subtitle">Sto recuperando i dati dal portale.</p>
+      </section>
+
+      <section class="status-card" id="statusCard">
+        <p id="statusText">Connessione in corso...</p>
+      </section>
+
+      <section class="events-section">
+        <div class="section-title-row">
+          <h2>I prossimi eventi</h2>
+        </div>
+        <div id="eventsList" class="events-list"></div>
+      </section>
+    </main>
+  </div>
 
   <script src="app.js"></script>
 </body>
