@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://script.google.com/macros/s/AKfycbzU5T6wWjNcj8cwADd2DcrPFlm7MPuRoXKoJJO_jX7DQLIDeTUUU-GGc1qZQ4pgXEnHMw/exec";
+const API_BASE_URL = "https://script.google.com/macros/s/AKfycbwBjmR-AFMSimrtPrNC3vCrrBPY4xlTcMKQzjhy0b12N_lhHjgwFbd5O3jHUXyPONjjEg/exec";
 
 const artistNameEl = document.getElementById("artistName");
 const subtitleEl = document.getElementById("subtitle");
