@@ -177,3 +177,15 @@ body {
     font-size: 18px;
   }
 }
+
+.events-group {
+  margin-bottom: 28px;
+}
+
+.events-group {
+  margin-bottom: 28px;
+}
+
+.events-group:last-child {
+  margin-bottom: 0;
+}
