@@ -1,0 +1,179 @@
+:root {
+  --bg: #0f1115;
+  --bg2: #151922;
+  --card: rgba(255,255,255,0.06);
+  --card-border: rgba(255,255,255,0.09);
+  --text: #f4f7fb;
+  --muted: #aab4c3;
+  --accent: #d7b56d;
+  --danger: #ff7b7b;
+  --ok: #7bd88f;
+  --shadow: 0 10px 30px rgba(0,0,0,0.25);
+  --radius: 20px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background:
+    radial-gradient(circle at top, #1b2230 0%, #0f1115 45%),
+    linear-gradient(180deg, #0d1016 0%, #11151d 100%);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+}
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 18px 20px;
+  background: rgba(10, 12, 17, 0.75);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.brand {
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.container {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 22px 16px 48px;
+}
+
+.hero-card,
+.status-card,
+.event-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.hero-card {
+  padding: 24px 20px;
+  margin-bottom: 16px;
+}
+
+.hero-card h1 {
+  margin: 0 0 8px;
+  font-size: 30px;
+  line-height: 1.08;
+  font-weight: 800;
+}
+
+.hero-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.status-card {
+  padding: 14px 16px;
+  margin-bottom: 22px;
+}
+
+.status-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.section-title-row {
+  margin-bottom: 12px;
+}
+
+.section-title-row h2 {
+  margin: 0;
+  font-size: 19px;
+}
+
+.events-list {
+  display: grid;
+  gap: 14px;
+}
+
+.event-card {
+  padding: 18px 16px;
+}
+
+.event-date {
+  display: inline-block;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.event-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 10px;
+}
+
+.event-meta {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.meta-line strong {
+  color: var(--text);
+}
+
+.maps-link {
+  display: inline-flex;
+  margin-top: 14px;
+  text-decoration: none;
+  color: #111;
+  background: var(--accent);
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.empty-state {
+  padding: 24px 18px;
+  border: 1px dashed rgba(255,255,255,0.14);
+  border-radius: 18px;
+  color: var(--muted);
+}
+
+.error {
+  color: var(--danger);
+}
+
+.success {
+  color: var(--ok);
+}
+
+@media (max-width: 640px) {
+  .hero-card h1 {
+    font-size: 26px;
+  }
+
+  .event-title {
+    font-size: 18px;
+  }
+}
