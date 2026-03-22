@@ -168,6 +168,14 @@ body {
   color: var(--ok);
 }
 
+.events-group {
+  margin-bottom: 28px;
+}
+
+.events-group:last-child {
+  margin-bottom: 0;
+}
+
 @media (max-width: 640px) {
   .hero-card h1 {
     font-size: 26px;
@@ -176,16 +184,4 @@ body {
   .event-title {
     font-size: 18px;
   }
-}
-
-.events-group {
-  margin-bottom: 28px;
-}
-
-.events-group {
-  margin-bottom: 28px;
-}
-
-.events-group:last-child {
-  margin-bottom: 0;
 }
