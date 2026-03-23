@@ -1,4 +1,5 @@
-const CACHE_NAME = "portale-artista-cache-v2";
+const CACHE_NAME = "portale-artista-cache-v3";
+
 const ASSETS_TO_CACHE = [
   "./",
   "./index.html",
@@ -18,11 +19,17 @@ self.addEventListener("install", event => {
 
 self.addEventListener("activate", event => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys.map(key => key !== CACHE_NAME ? caches.delete(key) : null)
+    caches.keys()
+      .then(keys =>
+        Promise.all(
+          keys.map(key => {
+            if (key !== CACHE_NAME) {
+              return caches.delete(key);
+            }
+          })
+        )
       )
-    ).then(() => self.clients.claim())
+      .then(() => self.clients.claim())
   );
 });
 
