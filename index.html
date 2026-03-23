@@ -34,10 +34,17 @@
       </section>
 
       <section class="events-section">
-        <div class="section-title-row">
-          <h2>I prossimi eventi</h2>
+        <div class="tabs">
+          <button id="tab-upcoming" class="tab-btn active" type="button">
+            Prossimi eventi
+          </button>
+          <button id="tab-past" class="tab-btn" type="button">
+            Passati
+          </button>
         </div>
-        <div id="eventsList" class="events-list"></div>
+
+        <div id="upcoming-events" class="events-list tab-panel active"></div>
+        <div id="past-events" class="events-list tab-panel"></div>
       </section>
     </main>
   </div>
