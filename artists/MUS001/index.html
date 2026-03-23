@@ -13,11 +13,82 @@
   <meta name="apple-mobile-web-app-title" content="Portale Artista" />
   <link rel="apple-touch-icon" href="../../icons/icon-192.png" />
 
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0f1115;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+
+    .box {
+      max-width: 420px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 24px;
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 24px;
+    }
+
+    p {
+      line-height: 1.5;
+      color: #d7dbe2;
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 12px 18px;
+      border-radius: 12px;
+      background: #d7b56d;
+      color: #111;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .small {
+      margin-top: 18px;
+      font-size: 14px;
+      color: #aab4c3;
+    }
+  </style>
+
   <script>
-    window.location.replace("../../?id_artista=MUS001&token=506f9547c45244658afafb08478b84740373f751");
+    const targetUrl = "../../?id_artista=MUS001&token=506f9547c45244658afafb08478b84740373f751";
+
+    function isStandaloneMode() {
+      return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+    }
+
+    if (isStandaloneMode()) {
+      window.location.replace(targetUrl);
+    }
   </script>
 </head>
-<body style="background:#0f1115;color:#fff;font-family:Arial,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">
-  Reindirizzamento...
+<body>
+  <div class="box">
+    <h1>Portale Artista</h1>
+    <p>
+      Per installare l’app su iPhone, premi <strong>Condividi</strong> e poi
+      <strong>Aggiungi a Home</strong>.
+    </p>
+    <a class="btn" href="../../?id_artista=MUS001&token=506f9547c45244658afafb08478b84740373f751">
+      Apri il portale ora
+    </a>
+    <div class="small">
+      Dopo l’installazione, l’icona aprirà direttamente il tuo portale.
+    </div>
+  </div>
 </body>
 </html>
