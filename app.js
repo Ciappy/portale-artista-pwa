@@ -7,7 +7,7 @@ const eventsListEl = document.getElementById("eventsList");
 
 function getQueryParam(name) {
   const url = new URL(window.location.href);
-  return url.searchParams.get(name);
+  return (url.searchParams.get(name) || "").trim();
 }
 
 function formatDate(dateStr) {
@@ -72,23 +72,30 @@ function buildSection(title, items, emptyText) {
 
 async function loadData() {
   try {
-    const artist = getQueryParam("artist");
-    const idArtista = getQueryParam("id_artista");
+    const artist =
+      getQueryParam("artist") ||
+      getQueryParam("artista") ||
+      "";
+
+    const idArtista =
+      getQueryParam("id_artista") ||
+      getQueryParam("id") ||
+      "";
 
     if (!artist && !idArtista) {
       artistNameEl.textContent = "Portale Artista";
       subtitleEl.textContent = "Nessun artista selezionato";
       statusTextEl.innerHTML = `<span class="error">Manca il parametro artist o id_artista nell'URL</span>`;
-      eventsListEl.innerHTML = `<div class="empty-state">Apri questa app con un link tipo <strong>?id_artista=ART001</strong> oppure <strong>?artist=Marco%20Caponi</strong>.</div>`;
+      eventsListEl.innerHTML = `<div class="empty-state">Apri questa app con un link tipo <strong>?id_artista=MUS001</strong> oppure <strong>?artist=Marco%20Caponi</strong>.</div>`;
       return;
     }
 
     let apiUrl = "";
 
     if (idArtista) {
-      apiUrl = `${API_BASE_URL}?mode=id&id_artista=${encodeURIComponent(idArtista)}`;
+      apiUrl = `${API_BASE_URL}?id_artista=${encodeURIComponent(idArtista)}`;
     } else {
-      apiUrl = `${API_BASE_URL}?mode=artist&artist=${encodeURIComponent(artist)}`;
+      apiUrl = `${API_BASE_URL}?artist=${encodeURIComponent(artist)}`;
     }
 
     statusTextEl.textContent = "Recupero eventi in corso...";
@@ -104,17 +111,18 @@ async function loadData() {
     const past = Array.isArray(data.past) ? data.past : [];
     const total = upcoming.length + past.length;
 
+    const displayName = data.artist_name || artist || idArtista || "Portale Artista";
+
     if (total > 0) {
-      const firstItem = upcoming[0] || past[0];
-      artistNameEl.textContent = firstItem?.NOME_ARTISTA || artist || idArtista || "Portale Artista";
       subtitleEl.textContent = `${upcoming.length} prossimi • ${past.length} passati`;
       statusTextEl.innerHTML = `<span class="success">Dati caricati correttamente</span>`;
+      artistNameEl.textContent = displayName;
 
       eventsListEl.innerHTML =
         buildSection("Prossimi", upcoming, "Nessun evento imminente.") +
         buildSection("Passati", past, "Nessun evento passato.");
     } else {
-      artistNameEl.textContent = artist || idArtista || "Portale Artista";
+      artistNameEl.textContent = displayName;
       subtitleEl.textContent = "Nessun evento trovato";
       statusTextEl.innerHTML = `<span class="error">Nessun dato disponibile per questo artista</span>`;
       eventsListEl.innerHTML = `<div class="empty-state">Non risultano eventi visibili associati a questo artista.</div>`;
