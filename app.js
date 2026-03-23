@@ -13,6 +13,59 @@ function getQueryParam(name) {
   return (url.searchParams.get(name) || "").trim();
 }
 
+function saveArtistIdentity() {
+  const artist =
+    getQueryParam("artist") ||
+    getQueryParam("artista") ||
+    "";
+
+  const idArtista =
+    getQueryParam("id_artista") ||
+    getQueryParam("id") ||
+    "";
+
+  if (idArtista) {
+    localStorage.setItem("id_artista", idArtista);
+    localStorage.removeItem("artist");
+  } else if (artist) {
+    localStorage.setItem("artist", artist);
+    localStorage.removeItem("id_artista");
+  }
+}
+
+function getStoredArtistIdentity() {
+  const artist = (localStorage.getItem("artist") || "").trim();
+  const idArtista = (localStorage.getItem("id_artista") || "").trim();
+
+  return { artist, idArtista };
+}
+
+function getActiveArtistIdentity() {
+  const urlArtist =
+    getQueryParam("artist") ||
+    getQueryParam("artista") ||
+    "";
+
+  const urlIdArtista =
+    getQueryParam("id_artista") ||
+    getQueryParam("id") ||
+    "";
+
+  if (urlIdArtista) {
+    localStorage.setItem("id_artista", urlIdArtista);
+    localStorage.removeItem("artist");
+    return { artist: "", idArtista: urlIdArtista };
+  }
+
+  if (urlArtist) {
+    localStorage.setItem("artist", urlArtist);
+    localStorage.removeItem("id_artista");
+    return { artist: urlArtist, idArtista: "" };
+  }
+
+  return getStoredArtistIdentity();
+}
+
 function formatDate(dateStr) {
   if (!dateStr) return "Data da definire";
 
@@ -54,7 +107,7 @@ function getEventStatus(item) {
 function getStatusBadge(statusRaw) {
   const status = statusRaw.toLowerCase();
 
-  if (status === "confermato") {
+  if (status === "confermato" || status === "confermata") {
     return `<div class="event-status confirmed">CONFERMATO</div>`;
   }
 
@@ -74,7 +127,7 @@ function buildEventCard(item) {
   const normalizedStatus = eventStatus.toLowerCase();
 
   const cardStatusClass =
-    normalizedStatus === "confermato"
+    normalizedStatus === "confermato" || normalizedStatus === "confermata"
       ? "confirmed"
       : normalizedStatus === "in attesa"
         ? "pending"
@@ -133,15 +186,9 @@ function setupTabs() {
 
 async function loadData() {
   try {
-    const artist =
-      getQueryParam("artist") ||
-      getQueryParam("artista") ||
-      "";
+    saveArtistIdentity();
 
-    const idArtista =
-      getQueryParam("id_artista") ||
-      getQueryParam("id") ||
-      "";
+    const { artist, idArtista } = getActiveArtistIdentity();
 
     if (!artist && !idArtista) {
       artistNameEl.textContent = "Portale Artista";
