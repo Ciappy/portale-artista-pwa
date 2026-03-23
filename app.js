@@ -24,6 +24,11 @@ function saveArtistIdentity() {
     getQueryParam("id") ||
     "";
 
+  const token =
+    getQueryParam("token") ||
+    getQueryParam("TOKEN_ACCESSO") ||
+    "";
+
   if (idArtista) {
     localStorage.setItem("id_artista", idArtista);
     localStorage.removeItem("artist");
@@ -31,13 +36,18 @@ function saveArtistIdentity() {
     localStorage.setItem("artist", artist);
     localStorage.removeItem("id_artista");
   }
+
+  if (token) {
+    localStorage.setItem("token_accesso", token);
+  }
 }
 
 function getStoredArtistIdentity() {
   const artist = (localStorage.getItem("artist") || "").trim();
   const idArtista = (localStorage.getItem("id_artista") || "").trim();
+  const token = (localStorage.getItem("token_accesso") || "").trim();
 
-  return { artist, idArtista };
+  return { artist, idArtista, token };
 }
 
 function getActiveArtistIdentity() {
@@ -51,19 +61,30 @@ function getActiveArtistIdentity() {
     getQueryParam("id") ||
     "";
 
+  const urlToken =
+    getQueryParam("token") ||
+    getQueryParam("TOKEN_ACCESSO") ||
+    "";
+
   if (urlIdArtista) {
     localStorage.setItem("id_artista", urlIdArtista);
     localStorage.removeItem("artist");
-    return { artist: "", idArtista: urlIdArtista };
-  }
-
-  if (urlArtist) {
+  } else if (urlArtist) {
     localStorage.setItem("artist", urlArtist);
     localStorage.removeItem("id_artista");
-    return { artist: urlArtist, idArtista: "" };
   }
 
-  return getStoredArtistIdentity();
+  if (urlToken) {
+    localStorage.setItem("token_accesso", urlToken);
+  }
+
+  const stored = getStoredArtistIdentity();
+
+  return {
+    artist: urlArtist || stored.artist,
+    idArtista: urlIdArtista || stored.idArtista,
+    token: urlToken || stored.token
+  };
 }
 
 function formatDate(dateStr) {
@@ -188,13 +209,13 @@ async function loadData() {
   try {
     saveArtistIdentity();
 
-    const { artist, idArtista } = getActiveArtistIdentity();
+    const { artist, idArtista, token } = getActiveArtistIdentity();
 
-    if (!artist && !idArtista) {
+    if ((!artist && !idArtista) || !token) {
       artistNameEl.textContent = "Portale Artista";
-      subtitleEl.textContent = "Nessun artista selezionato";
-      statusTextEl.innerHTML = `<span class="error">Manca il parametro artist o id_artista nell'URL</span>`;
-      upcomingEventsEl.innerHTML = `<div class="empty-state">Apri questa app con un link tipo <strong>?id_artista=MUS001</strong> oppure <strong>?artist=Marco%20Caponi</strong>.</div>`;
+      subtitleEl.textContent = "Accesso non valido";
+      statusTextEl.innerHTML = `<span class="error">Mancano i parametri necessari nell'URL</span>`;
+      upcomingEventsEl.innerHTML = `<div class="empty-state">Apri questa app con un link tipo <strong>?id_artista=MUS001&token=ABC123</strong>.</div>`;
       pastEventsEl.innerHTML = `<div class="empty-state">Nessun evento passato da mostrare.</div>`;
       return;
     }
@@ -202,9 +223,9 @@ async function loadData() {
     let apiUrl = "";
 
     if (idArtista) {
-      apiUrl = `${API_BASE_URL}?id_artista=${encodeURIComponent(idArtista)}`;
+      apiUrl = `${API_BASE_URL}?id_artista=${encodeURIComponent(idArtista)}&token=${encodeURIComponent(token)}`;
     } else {
-      apiUrl = `${API_BASE_URL}?artist=${encodeURIComponent(artist)}`;
+      apiUrl = `${API_BASE_URL}?artist=${encodeURIComponent(artist)}&token=${encodeURIComponent(token)}`;
     }
 
     statusTextEl.textContent = "Recupero eventi in corso...";
