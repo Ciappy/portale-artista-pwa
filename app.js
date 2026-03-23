@@ -3,7 +3,10 @@ const API_BASE_URL = "https://script.google.com/macros/s/AKfycbwBjmR-AFMSimrtPrN
 const artistNameEl = document.getElementById("artistName");
 const subtitleEl = document.getElementById("subtitle");
 const statusTextEl = document.getElementById("statusText");
-const eventsListEl = document.getElementById("eventsList");
+const upcomingEventsEl = document.getElementById("upcoming-events");
+const pastEventsEl = document.getElementById("past-events");
+const tabUpcomingEl = document.getElementById("tab-upcoming");
+const tabPastEl = document.getElementById("tab-past");
 
 function getQueryParam(name) {
   const url = new URL(window.location.href);
@@ -33,6 +36,11 @@ function escapeHtml(str) {
     .replaceAll("'", "&#039;");
 }
 
+function buildMetaLine(label, value) {
+  if (!value) return "";
+  return `<div class="meta-line"><strong>${escapeHtml(label)}:</strong> ${escapeHtml(value)}</div>`;
+}
+
 function buildEventCard(item) {
   const mapsLink = item.LINK_MAPS
     ? `<a class="maps-link" href="${escapeHtml(item.LINK_MAPS)}" target="_blank" rel="noopener noreferrer">Apri mappa</a>`
@@ -43,31 +51,46 @@ function buildEventCard(item) {
       <div class="event-date">${escapeHtml(formatDate(item.DATA))}</div>
       <h3 class="event-title">${escapeHtml(item.NOME_EVENTO || "Evento")}</h3>
       <div class="event-meta">
-        <div class="meta-line"><strong>Location:</strong> ${escapeHtml(item.LOCATION || "-")}</div>
-        <div class="meta-line"><strong>Orario:</strong> ${escapeHtml(item.ORARIO || "-")}</div>
-        <div class="meta-line"><strong>Info:</strong> ${escapeHtml(item.INFO_COMUNI || "-")}</div>
-        <div class="meta-line"><strong>Note artista:</strong> ${escapeHtml(item.NOTE_ARTISTA || "-")}</div>
+        ${buildMetaLine("Location", item.LOCATION)}
+        ${buildMetaLine("Orario", item.ORARIO)}
+        ${buildMetaLine("Info", item.INFO_COMUNI)}
+        ${buildMetaLine("Note artista", item.NOTE_ARTISTA)}
       </div>
       ${mapsLink}
     </article>
   `;
 }
 
-function buildSection(title, items, emptyText) {
-  const content = items.length
-    ? items.map(buildEventCard).join("")
-    : `<div class="empty-state">${escapeHtml(emptyText)}</div>`;
+function buildEventsContent(items, emptyText) {
+  if (!items.length) {
+    return `<div class="empty-state">${escapeHtml(emptyText)}</div>`;
+  }
 
-  return `
-    <section class="events-group">
-      <div class="section-title-row">
-        <h2>${escapeHtml(title)}</h2>
-      </div>
-      <div class="events-list">
-        ${content}
-      </div>
-    </section>
-  `;
+  return items.map(buildEventCard).join("");
+}
+
+function activateTab(tabName) {
+  const isUpcoming = tabName === "upcoming";
+
+  tabUpcomingEl.classList.toggle("active", isUpcoming);
+  tabPastEl.classList.toggle("active", !isUpcoming);
+
+  upcomingEventsEl.classList.toggle("active", isUpcoming);
+  pastEventsEl.classList.toggle("active", !isUpcoming);
+}
+
+function setupTabs() {
+  if (!tabUpcomingEl || !tabPastEl || !upcomingEventsEl || !pastEventsEl) return;
+
+  tabUpcomingEl.addEventListener("click", () => {
+    activateTab("upcoming");
+  });
+
+  tabPastEl.addEventListener("click", () => {
+    activateTab("past");
+  });
+
+  activateTab("upcoming");
 }
 
 async function loadData() {
@@ -86,7 +109,8 @@ async function loadData() {
       artistNameEl.textContent = "Portale Artista";
       subtitleEl.textContent = "Nessun artista selezionato";
       statusTextEl.innerHTML = `<span class="error">Manca il parametro artist o id_artista nell'URL</span>`;
-      eventsListEl.innerHTML = `<div class="empty-state">Apri questa app con un link tipo <strong>?id_artista=MUS001</strong> oppure <strong>?artist=Marco%20Caponi</strong>.</div>`;
+      upcomingEventsEl.innerHTML = `<div class="empty-state">Apri questa app con un link tipo <strong>?id_artista=MUS001</strong> oppure <strong>?artist=Marco%20Caponi</strong>.</div>`;
+      pastEventsEl.innerHTML = `<div class="empty-state">Nessun evento passato da mostrare.</div>`;
       return;
     }
 
@@ -113,25 +137,26 @@ async function loadData() {
 
     const displayName = data.artist_name || artist || idArtista || "Portale Artista";
 
+    artistNameEl.textContent = displayName;
+
     if (total > 0) {
       subtitleEl.textContent = `${upcoming.length} prossimi • ${past.length} passati`;
       statusTextEl.innerHTML = `<span class="success">Dati caricati correttamente</span>`;
-      artistNameEl.textContent = displayName;
 
-      eventsListEl.innerHTML =
-        buildSection("Prossimi", upcoming, "Nessun evento imminente.") +
-        buildSection("Passati", past, "Nessun evento passato.");
+      upcomingEventsEl.innerHTML = buildEventsContent(upcoming, "Nessun evento imminente.");
+      pastEventsEl.innerHTML = buildEventsContent(past, "Nessun evento passato.");
     } else {
-      artistNameEl.textContent = displayName;
       subtitleEl.textContent = "Nessun evento trovato";
       statusTextEl.innerHTML = `<span class="error">Nessun dato disponibile per questo artista</span>`;
-      eventsListEl.innerHTML = `<div class="empty-state">Non risultano eventi visibili associati a questo artista.</div>`;
+      upcomingEventsEl.innerHTML = `<div class="empty-state">Non risultano eventi imminenti associati a questo artista.</div>`;
+      pastEventsEl.innerHTML = `<div class="empty-state">Non risultano eventi passati associati a questo artista.</div>`;
     }
   } catch (error) {
     artistNameEl.textContent = "Portale Artista";
     subtitleEl.textContent = "Errore di caricamento";
     statusTextEl.innerHTML = `<span class="error">${escapeHtml(error.message || "Errore sconosciuto")}</span>`;
-    eventsListEl.innerHTML = `<div class="empty-state">Si è verificato un problema nel caricamento dei dati.</div>`;
+    upcomingEventsEl.innerHTML = `<div class="empty-state">Si è verificato un problema nel caricamento dei dati.</div>`;
+    pastEventsEl.innerHTML = `<div class="empty-state">Si è verificato un problema nel caricamento dei dati.</div>`;
     console.error(error);
   }
 }
@@ -144,4 +169,5 @@ if ("serviceWorker" in navigator) {
   });
 }
 
+setupTabs();
 loadData();
