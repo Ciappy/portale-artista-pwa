@@ -165,6 +165,7 @@ function buildEventCard(item) {
         ${buildMetaLine("Stato", eventStatus)}
         ${buildMetaLine("Location", item.LOCATION)}
         ${buildMetaLine("Orario", item.ORARIO)}
+        ${buildMetaLine("Cachet concordato", item.CACHET_CONCORDATO)}
         ${buildMetaLine("Info", item.INFO_COMUNI)}
         ${buildMetaLine("Note artista", item.NOTE_ARTISTA)}
       </div>
