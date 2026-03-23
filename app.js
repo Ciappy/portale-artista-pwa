@@ -71,10 +71,19 @@ function buildEventCard(item) {
     : "";
 
   const eventStatus = getEventStatus(item);
+  const normalizedStatus = eventStatus.toLowerCase();
+
+  const cardStatusClass =
+    normalizedStatus === "confermato"
+      ? "confirmed"
+      : normalizedStatus === "in attesa"
+        ? "pending"
+        : "";
+
   const statusBadge = getStatusBadge(eventStatus);
 
   return `
-    <article class="event-card">
+    <article class="event-card ${cardStatusClass}">
       ${statusBadge}
       <div class="event-date">${escapeHtml(formatDate(item.DATA))}</div>
       <h3 class="event-title">${escapeHtml(item.NOME_EVENTO || "Evento")}</h3>
