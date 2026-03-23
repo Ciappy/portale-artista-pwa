@@ -9,7 +9,6 @@
   --danger: #ff7b7b;
   --ok: #7bd88f;
 
-  /* 🎯 NUOVI COLORI STATO */
   --status-confirmed: #7bd88f;
   --status-pending: #f4d35e;
 
@@ -136,7 +135,7 @@ body {
   gap: 14px;
 }
 
-/* 🔥 FIX TAB (IMPORTANTISSIMO) */
+/* FIX TAB */
 .tab-panel {
   display: none;
 }
@@ -149,9 +148,29 @@ body {
 .event-card {
   padding: 18px 16px;
   position: relative;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
 
-/* 🎯 BADGE STATO */
+.event-card:hover {
+  transform: translateY(-2px);
+}
+
+/* BORDO CARD IN BASE ALLO STATO */
+.event-card.confirmed {
+  border-color: rgba(123,216,143,0.55);
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.25),
+    0 0 0 1px rgba(123,216,143,0.16) inset;
+}
+
+.event-card.pending {
+  border-color: rgba(244,211,94,0.55);
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.25),
+    0 0 0 1px rgba(244,211,94,0.16) inset;
+}
+
+/* BADGE STATO */
 .event-status {
   position: absolute;
   top: 14px;
@@ -163,14 +182,12 @@ body {
   letter-spacing: 0.05em;
 }
 
-/* 🟢 Confermato */
 .event-status.confirmed {
   background: rgba(123,216,143,0.15);
   color: var(--status-confirmed);
   border: 1px solid rgba(123,216,143,0.4);
 }
 
-/* 🟡 In attesa */
 .event-status.pending {
   background: rgba(244,211,94,0.15);
   color: var(--status-pending);
