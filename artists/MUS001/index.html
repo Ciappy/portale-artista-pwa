@@ -65,14 +65,22 @@
   </style>
 
   <script>
-    const targetUrl = "../../?id_artista=MUS001&token=506f9547c45244658afafb08478b84740373f751";
+    const ID_ARTISTA = "MUS001";
+    const TOKEN_ACCESSO = "506f9547c45244658afafb08478b84740373f751";
 
     function isStandaloneMode() {
       return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
     }
 
+    function bootstrapInstalledApp() {
+      localStorage.setItem("id_artista", ID_ARTISTA);
+      localStorage.setItem("token_accesso", TOKEN_ACCESSO);
+      localStorage.removeItem("artist");
+      window.location.replace("../../index.html");
+    }
+
     if (isStandaloneMode()) {
-      window.location.replace(targetUrl);
+      bootstrapInstalledApp();
     }
   </script>
 </head>
@@ -83,11 +91,11 @@
       Per installare l’app su iPhone, premi <strong>Condividi</strong> e poi
       <strong>Aggiungi a Home</strong>.
     </p>
-    <a class="btn" href="../../?id_artista=MUS001&token=506f9547c45244658afafb08478b84740373f751">
+    <a class="btn" href="../../index.html?id_artista=MUS001&token=506f9547c45244658afafb08478b84740373f751">
       Apri il portale ora
     </a>
     <div class="small">
-      Dopo l’installazione, l’icona aprirà direttamente il tuo portale.
+      Dopo l’installazione, l’icona salverà automaticamente l’accesso corretto.
     </div>
   </div>
 </body>
