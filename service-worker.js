@@ -1,4 +1,4 @@
-const CACHE_NAME = "portale-artista-cache-v3";
+const CACHE_NAME = "portale-artista-cache-v4";
 
 const ASSETS_TO_CACHE = [
   "./",
@@ -34,7 +34,28 @@ self.addEventListener("activate", event => {
 });
 
 self.addEventListener("fetch", event => {
+  const request = event.request;
+
+  // 👉 Se è una chiamata API → prova sempre la rete (dati freschi)
+  if (request.url.includes("script.google.com")) {
+    event.respondWith(
+      fetch(request).catch(() => caches.match(request))
+    );
+    return;
+  }
+
+  // 👉 Per tutto il resto (HTML, CSS, JS, icone) → cache first
   event.respondWith(
-    fetch(event.request).catch(() => caches.match(event.request))
+    caches.match(request).then(cachedResponse => {
+      return (
+        cachedResponse ||
+        fetch(request).then(networkResponse => {
+          return caches.open(CACHE_NAME).then(cache => {
+            cache.put(request, networkResponse.clone());
+            return networkResponse;
+          });
+        })
+      );
+    })
   );
 });
