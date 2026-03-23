@@ -41,21 +41,37 @@ function buildMetaLine(label, value) {
   return `<div class="meta-line"><strong>${escapeHtml(label)}:</strong> ${escapeHtml(value)}</div>`;
 }
 
+function getEventStatus(item) {
+  return String(
+    item.STATO ||
+    item.stato ||
+    item.Status ||
+    item.status ||
+    ""
+  ).trim();
+}
+
+function getStatusBadge(statusRaw) {
+  const status = statusRaw.toLowerCase();
+
+  if (status === "confermato") {
+    return `<div class="event-status confirmed">CONFERMATO</div>`;
+  }
+
+  if (status === "in attesa") {
+    return `<div class="event-status pending">IN ATTESA</div>`;
+  }
+
+  return "";
+}
+
 function buildEventCard(item) {
   const mapsLink = item.LINK_MAPS
     ? `<a class="maps-link" href="${escapeHtml(item.LINK_MAPS)}" target="_blank" rel="noopener noreferrer">Apri mappa</a>`
     : "";
 
-  /* 🎯 STATO EVENTO */
-  const status = (item.STATO || "").toLowerCase();
-
-  let statusBadge = "";
-
-  if (status === "confermato") {
-    statusBadge = `<div class="event-status confirmed">CONFERMATO</div>`;
-  } else if (status === "in attesa") {
-    statusBadge = `<div class="event-status pending">IN ATTESA</div>`;
-  }
+  const eventStatus = getEventStatus(item);
+  const statusBadge = getStatusBadge(eventStatus);
 
   return `
     <article class="event-card">
@@ -63,6 +79,7 @@ function buildEventCard(item) {
       <div class="event-date">${escapeHtml(formatDate(item.DATA))}</div>
       <h3 class="event-title">${escapeHtml(item.NOME_EVENTO || "Evento")}</h3>
       <div class="event-meta">
+        ${buildMetaLine("Stato", eventStatus)}
         ${buildMetaLine("Location", item.LOCATION)}
         ${buildMetaLine("Orario", item.ORARIO)}
         ${buildMetaLine("Info", item.INFO_COMUNI)}
