@@ -1,4 +1,4 @@
-const CACHE_NAME = "portale-artista-cache-v11";
+const CACHE_NAME = "portale-artista-cache-v12";
 
 const ASSETS_TO_CACHE = [
   "./",
