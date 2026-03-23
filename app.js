@@ -46,8 +46,20 @@ function buildEventCard(item) {
     ? `<a class="maps-link" href="${escapeHtml(item.LINK_MAPS)}" target="_blank" rel="noopener noreferrer">Apri mappa</a>`
     : "";
 
+  /* 🎯 STATO EVENTO */
+  const status = (item.STATO || "").toLowerCase();
+
+  let statusBadge = "";
+
+  if (status === "confermato") {
+    statusBadge = `<div class="event-status confirmed">CONFERMATO</div>`;
+  } else if (status === "in attesa") {
+    statusBadge = `<div class="event-status pending">IN ATTESA</div>`;
+  }
+
   return `
     <article class="event-card">
+      ${statusBadge}
       <div class="event-date">${escapeHtml(formatDate(item.DATA))}</div>
       <h3 class="event-title">${escapeHtml(item.NOME_EVENTO || "Evento")}</h3>
       <div class="event-meta">
