@@ -8,6 +8,11 @@
   --accent: #d7b56d;
   --danger: #ff7b7b;
   --ok: #7bd88f;
+
+  /* 🎯 NUOVI COLORI STATO */
+  --status-confirmed: #7bd88f;
+  --status-pending: #f4d35e;
+
   --shadow: 0 10px 30px rgba(0,0,0,0.25);
   --radius: 20px;
 }
@@ -97,6 +102,7 @@ body {
   font-size: 14px;
 }
 
+/* TABS */
 .tabs {
   display: flex;
   gap: 10px;
@@ -124,21 +130,51 @@ body {
   box-shadow: 0 6px 18px rgba(0,0,0,0.16);
 }
 
-.tab-panel {
-  display: none;
-}
-
-.tab-panel.active {
-  display: block;
-}
-
+/* EVENT LIST */
 .events-list {
   display: grid;
   gap: 14px;
 }
 
+/* 🔥 FIX TAB (IMPORTANTISSIMO) */
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: grid;
+}
+
+/* EVENT CARD */
 .event-card {
   padding: 18px 16px;
+  position: relative;
+}
+
+/* 🎯 BADGE STATO */
+.event-status {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.05em;
+}
+
+/* 🟢 Confermato */
+.event-status.confirmed {
+  background: rgba(123,216,143,0.15);
+  color: var(--status-confirmed);
+  border: 1px solid rgba(123,216,143,0.4);
+}
+
+/* 🟡 In attesa */
+.event-status.pending {
+  background: rgba(244,211,94,0.15);
+  color: var(--status-pending);
+  border: 1px solid rgba(244,211,94,0.4);
 }
 
 .event-date {
