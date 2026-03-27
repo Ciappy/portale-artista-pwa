@@ -1,8 +1,8 @@
 {
   "name": "Portale Artista",
   "short_name": "Artista",
-  "start_url": "/portale-artista-pwa/artists/MUS001/index.html",
-  "scope": "/portale-artista-pwa/artists/MUS001/",
+  "start_url": "/portale-artista-pwa/artists/MUS008/index.html",
+  "scope": "/portale-artista-pwa/artists/MUS008/",
   "display": "standalone",
   "background_color": "#0f1115",
   "theme_color": "#0f1115",
