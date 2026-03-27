@@ -87,6 +87,10 @@ function getActiveArtistIdentity() {
   };
 }
 
+function getEventDisplayDate(item) {
+  return String(item.DATA_ARTISTA || item.DATA || "").trim();
+}
+
 function formatDate(dateStr) {
   if (!dateStr) return "Data da definire";
 
@@ -155,11 +159,12 @@ function buildEventCard(item) {
         : "";
 
   const statusBadge = getStatusBadge(eventStatus);
+  const eventDate = getEventDisplayDate(item);
 
   return `
     <article class="event-card ${cardStatusClass}">
       ${statusBadge}
-      <div class="event-date">${escapeHtml(formatDate(item.DATA))}</div>
+      <div class="event-date">${escapeHtml(formatDate(eventDate))}</div>
       <h3 class="event-title">${escapeHtml(item.NOME_EVENTO || "Evento")}</h3>
       <div class="event-meta">
         ${buildMetaLine("Stato", eventStatus)}
